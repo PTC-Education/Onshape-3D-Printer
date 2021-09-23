@@ -11,9 +11,10 @@ import json
 ## Import and configure Onshpae Client
 ##
 ##
+print('importing Onshape Client...')
 from onshape_client.client import Client
 from onshape_client.onshape_url import OnshapeElement
-
+print('configuring Onshape Client...')
 try:
     try:
         exec(open('../apikeys.py').read())
@@ -78,7 +79,7 @@ def serial_ports():
 ##
 
 ## Get Mates Function
-def getMates(client,url,base):
+def getMates(url):
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
     element = OnshapeElement(url)
     method = 'GET'
@@ -99,7 +100,7 @@ def getMates(client,url,base):
     # print(json.dumps(parsed, indent=4, sort_keys=True))
     return parsed
 
-def setMates(client,url,base,body):
+def setMates(url,body):
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
     element = OnshapeElement(url)
     method = 'POST'
@@ -121,7 +122,7 @@ def setMates(client,url,base,body):
     return parsed
 
 ## Mass Prop test
-def massProp(client, url: str, base):
+def massProp(url: str):
   fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
   element = OnshapeElement(url)
   method = 'GET'
@@ -154,10 +155,32 @@ def documents(params = {}):
 
   response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
 
-  parsed = json.loads(response.data)
+  # parsed = json.loads(response.data)
   # The command below prints the entire JSON response from Onshape
   # print(json.dumps(parsed, indent=4, sort_keys=True))
-  return parsed
+  return response.status
+
+## Export STL from Part Studio
+def exportSTL(url: str, filename="OnshapePart.stl"):
+    fixed_url = '/api/partstudios/d/did/w/wid/e/eid/stl'
+    element = OnshapeElement(url)
+    method = 'GET'
+
+    params = {"units":"millimeter"}
+    payload = {}
+    headers = {'Accept': 'application/vnd.onshape.v1+octet-stream',
+            'Content-Type': 'application/json'}
+
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+    fixed_url = fixed_url.replace('eid', element.eid)
+
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+    with open(filename, 'wb') as f:
+        f.write(response.data.encode())
+    print('file exported as '+filename)
+
 
 
 ##
