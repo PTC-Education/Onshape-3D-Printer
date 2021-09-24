@@ -42,38 +42,6 @@ except:
 
 ##
 ##
-## Define Serial Functions
-##
-##
-def serial_ports():
-    if sys.platform.startswith('win'):
-        ports = ['COM%s' % (i + 1) for i in range(256)]
-    elif sys.platform.startswith('darwin'):
-        ports = glob.glob('/dev/tty.*')
-        for port in ports:
-            if 'usb' in port:
-                guess = port                
-                
-        try:
-            return guess
-        except:
-            print('no USB ports found')
-            quit()
-    else:
-        raise EnvironmentError('Unsupported platform')
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    print('port found:'+result[0])
-    return result[0]
-
-##
-##
 ## Onshape Functions
 ##
 ##
@@ -161,12 +129,13 @@ def documents(params = {}):
   return response.status
 
 ## Export STL from Part Studio
-def exportSTL(url: str, filename="OnshapePart.stl"):
+def exportSTL(url: str, filename="OnshapePart.stl", configuration=""):
     fixed_url = '/api/partstudios/d/did/w/wid/e/eid/stl'
     element = OnshapeElement(url)
     method = 'GET'
 
-    params = {"units":"millimeter"}
+    params = {"units":"millimeter",
+    "configuration":configuration}
     payload = {}
     headers = {'Accept': 'application/vnd.onshape.v1+octet-stream',
             'Content-Type': 'application/json'}
