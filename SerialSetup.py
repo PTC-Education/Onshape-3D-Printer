@@ -27,16 +27,17 @@ def serial_ports():
             quit()
     elif sys.platform.startswith('linux'):
         ports = glob.glob('/dev/tty*')
-        # usbPorts = []
-        # for port in ports:
-        #     if 'USB' in port:
-        #         usbPorts.append(port)                
+        usbPorts = []
+        for port in ports:
+            if 'USB' in port:
+                usbPorts.append(port)                
                 
-        # if len(usbPorts) == 0:
-        #     print('no USB ports found')
-        #     quit()
-        # else:
-        #     return usbPorts
+        if len(usbPorts) == 0:
+            print('no USB ports found')
+            quit()
+        else:
+            print(usbPorts)
+            return usbPorts
     else:
         raise EnvironmentError('Unsupported platform')
     result = []
@@ -47,5 +48,5 @@ def serial_ports():
             result.append(port)
         except (OSError, serial.SerialException):
             pass
-    print('port found:'+result[0])
-    return result[0]
+    print('port found:'+result)
+    return result[1]
