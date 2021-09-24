@@ -17,12 +17,20 @@ from onshape_client.onshape_url import OnshapeElement
 print('configuring Onshape Client...')
 try:
     try:
-        exec(open('../apikeys.py').read())
-        base = 'https://cad.onshape.com'
-        client = Client(configuration={"base_url": base,
-                                    "access_key": access,
-                                    "secret_key": secret})
-        print('client configured')
+        try:
+            exec(open('../apikeys.py').read())
+            base = 'https://cad.onshape.com'
+            client = Client(configuration={"base_url": base,
+                                        "access_key": access,
+                                        "secret_key": secret})
+            print('client configured')
+        except:
+            exec(open('../../apikeys.py').read())
+            base = 'https://cad.onshape.com'
+            client = Client(configuration={"base_url": base,
+                                        "access_key": access,
+                                        "secret_key": secret})
+            print('client configured')
     except:
         exec(open('apikeys.py').read())
         base = 'https://cad.onshape.com'
