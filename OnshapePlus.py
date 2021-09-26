@@ -5,6 +5,7 @@ import serial
 import sys
 import glob
 import json
+import array
 
 ##
 ##

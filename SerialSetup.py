@@ -36,7 +36,7 @@ def serial_ports():
             print('no USB ports found')
             quit()
         else:
-            print(usbPorts)
+            # print(usbPorts)
             return usbPorts
     else:
         raise EnvironmentError('Unsupported platform')
