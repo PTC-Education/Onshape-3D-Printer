@@ -1,3 +1,4 @@
+from Octoprint import opJog
 from os import error
 from SerialSetup import *
 from AL5Dsetup import *
@@ -25,6 +26,7 @@ for i in range(len(LastJointArray)):
                     time.sleep(delay)
 
 mateValuesNow, mateResponse = getMateValues()
+lastEnder3Y = mateValuesNow[9]
 
 try:
     while True:
@@ -38,9 +40,13 @@ try:
         # print(mateValuesNow[7],mateValuesNow[8])
         setMateValues(mateResponse,newMateValues[0],newMateValues[1],newMateValues[2],newMateValues[3],mateValuesNow[7],mateValuesNow[8])
         mateValuesNow, mateResponse = getMateValues()
+        newEnder3Y = mateValuesNow[9]
         # print(mateValuesNow)
         print(mateValuesNow[0:6])
         # print(LastJointArray)
+        if lastEnder3Y - newEnder3Y != 0:
+            yjog = int((lastEnder3Y - newEnder3Y)*1000)
+            opJog(0,yjog,0)
 
         for i in range(6):
             if LastJointArray[i] - mateValuesNow[i] < 0:

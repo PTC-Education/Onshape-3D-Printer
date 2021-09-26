@@ -11,7 +11,7 @@ url = 'https://cad.onshape.com/documents/f5405092df38df2bb9ff1a24/w/802789005337
 ##
 def getMateValues():
     RobotData = []
-    RobotData = [0 for i in range(9)]
+    RobotData = [0 for i in range(10)]
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
 
     element = OnshapeElement(url)
@@ -49,6 +49,8 @@ def getMateValues():
             RobotData[7] = translate(fullResponse['mateValues'][i]['translationZ'],0,0.127,math.pi/2,-math.pi/2)
         elif fullResponse['mateValues'][i]['mateName'] == "Open Close":
             RobotData[8] = translate(fullResponse['mateValues'][i]['translationZ'],0,0.127,0,math.pi)
+        elif fullResponse['mateValues'][i]['mateName'] == "Y Axis":
+            RobotData[9] = fullResponse['mateValues'][i]['translationZ']
 
     return RobotData, fullResponse
 
@@ -133,6 +135,7 @@ def setMateValues(fullResponse,baseAngle,shoulderAngle,elbowAngle,wristAngle,han
         elif fullResponse['mateValues'][i]['mateName'] == "Gripper":
             fullResponse['mateValues'][i]['rotationZ'] = gripperAngle
             newPayload['mateValues'].append(fullResponse['mateValues'][i])
+        
 
     method = 'POST'
 

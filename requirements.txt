@@ -1,3 +1,4 @@
 onshape-client
 pyserial
 requests
+numpy

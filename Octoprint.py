@@ -21,8 +21,12 @@ print('Looking for apikeys.py file...')
 
 try:
     try:
-        exec(open('../apikeys.py').read())
-        print('api key named OPapiKey found')
+        try:
+            exec(open('../apikeys.py').read())
+            print('api key named OPapiKey found')
+        except:
+            exec(open('../../apikeys.py').read())
+            print('api key named OPapiKey found')
     except:
         exec(open('apikeys.py').read())
         print('api key named OPapiKey found')
@@ -84,7 +88,7 @@ def opJobInfo():
     # print(response)
     FullResponse = json.dumps(response.json(), indent=4, sort_keys=True)
     # print(FullResponse)
-    return response
+    return response.json()
 
 def opHome():
     url = "/api/printer/printhead"
