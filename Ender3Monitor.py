@@ -1,9 +1,12 @@
 from Octoprint import *
+from OnshapePlus import *
 
-jobInfo = opJobInfo()
-printerInfo = opInfo()
-print(jobInfo['state'])
-print(jobInfo['progress']['completion'])
-print(printerInfo)
+while True:
+    jobInfo = opJobInfo()
+    printerInfo, temps = opInfo()
+    # print(jobInfo['state'])
+    # print(jobInfo['progress']['completion'])
+    # print(printerInfo)
 
-opJog(0,5,0)
+    printerStatus(temps[0],temps[1],jobInfo['progress']['completion'])
+    time.sleep(15)
