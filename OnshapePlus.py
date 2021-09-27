@@ -159,7 +159,7 @@ def exportSTL(url: str, filename="OnshapePart.stl", configuration=""):
         f.write(response.data.encode())
     print('file exported as '+filename)
 
-def printerStatus(nozzleTemp,bedTemp,printStatus):
+def printerStatus(nozzleTemp,nozzleTarget,bedTemp,bedTarget,printerState,printStatus):
     fixed_url = '/api/partstudios/d/did/w/wid/e/eid/features'
 
     element = OnshapeElement('https://cad.onshape.com/documents/f5405092df38df2bb9ff1a24/w/802789005337ddbf1908553c/e/18dfb6003d165ccc97db128c')
@@ -175,10 +175,13 @@ def printerStatus(nozzleTemp,bedTemp,printStatus):
             'Content-Type': 'application/json'}
 
     response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
-    print(json.loads(response.data)["features"][2]["message"]["entities"][0]["message"]['parameters'][1]['message']['value'])
+    # print(json.loads(response.data)["features"][2]["message"]["entities"][0]["message"]['parameters'][1]['message']['value'])
 
-    newText = 'Nozzle Temp: '+str(nozzleTemp)+'''
-Bed Temp: '''+str(bedTemp)+'''
+    newText = 'Nozzle Temp: '+str(int(nozzleTemp))+''' deg C
+Nozzle Target: '''+str(int(nozzleTarget))+''' deg C
+Bed Temp: '''+str(int(bedTemp))+''' deg C
+Bed Target: '''+str(int(bedTarget))+''' deg C
+Printer State: '''+printerState+'''
 Percent Complete: '''+str(printStatus)+'%'
 
     newFeature = json.loads(response.data)["features"][2]

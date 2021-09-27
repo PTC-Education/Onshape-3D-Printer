@@ -6,7 +6,11 @@ while True:
     printerInfo, temps = opInfo()
     # print(jobInfo['state'])
     # print(jobInfo['progress']['completion'])
-    # print(printerInfo)
+    print(temps)
+    try:
+        completion = int(jobInfo['progress']['completion'])
+    except:
+        completion = "not started"
 
-    printerStatus(temps[0],temps[1],jobInfo['progress']['completion'])
-    time.sleep(15)
+    printerStatus(temps[1],temps[3],temps[0],temps[2],jobInfo['state'],completion)
+    time.sleep(5)

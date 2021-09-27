@@ -40,6 +40,8 @@ def getMateValues():
         elif fullResponse['mateValues'][i]['mateName'] == "Wrist":
             if fullResponse['mateValues'][i]['rotationZ'] > 3.14:
                 fullResponse['mateValues'][i]['rotationZ'] = fullResponse['mateValues'][i]['rotationZ'] - 3.14
+            elif fullResponse['mateValues'][i]['rotationZ'] < 0:
+                fullResponse['mateValues'][i]['rotationZ'] = fullResponse['mateValues'][i]['rotationZ'] + 3.14
             RobotData[3] = int(translate(fullResponse['mateValues'][i]['rotationZ'],0,3.14,2500,500))+50
         elif fullResponse['mateValues'][i]['mateName'] == "Hand":
             RobotData[4] = int(translate(fullResponse['mateValues'][i]['rotationZ'],-math.pi/2,math.pi/2,500,2500))
