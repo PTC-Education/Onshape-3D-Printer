@@ -114,7 +114,8 @@ def opJog(x,y,z):
         "command":"jog",
         "x": x,
         "y": y,
-        "z": z
+        "z": z,
+        "speed":300
     }
     headers = {
     'X-Api-Key': OPappKey,

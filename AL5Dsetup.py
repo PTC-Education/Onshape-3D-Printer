@@ -11,7 +11,7 @@ url = 'https://cad.onshape.com/documents/f5405092df38df2bb9ff1a24/w/802789005337
 ##
 def getMateValues():
     RobotData = []
-    RobotData = [0 for i in range(10)]
+    RobotData = [0 for i in range(12)]
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
 
     element = OnshapeElement(url)
@@ -55,6 +55,10 @@ def getMateValues():
             RobotData[8] = translate(fullResponse['mateValues'][i]['translationZ'],0,0.127,0,math.pi)
         elif fullResponse['mateValues'][i]['mateName'] == "Y Axis":
             RobotData[9] = fullResponse['mateValues'][i]['translationZ']
+        elif fullResponse['mateValues'][i]['mateName'] == "X Axis":
+            RobotData[10] = fullResponse['mateValues'][i]['translationZ']
+        elif fullResponse['mateValues'][i]['mateName'] == "Z Axis":
+            RobotData[11] = fullResponse['mateValues'][i]['translationZ']
 
     return RobotData, fullResponse
 

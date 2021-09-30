@@ -26,7 +26,7 @@ for i in range(len(LastJointArray)):
                     time.sleep(delay)
 
 mateValuesNow, mateResponse = getMateValues()
-lastEnder3Y = mateValuesNow[9]
+lastEnder3YXZ = [mateValuesNow[9],mateValuesNow[10],mateValuesNow[11]]
 
 try:
     while True:
@@ -40,13 +40,16 @@ try:
         # print(mateValuesNow[7],mateValuesNow[8])
         setMateValues(mateResponse,newMateValues[0],newMateValues[1],newMateValues[2],newMateValues[3],mateValuesNow[7],mateValuesNow[8])
         mateValuesNow, mateResponse = getMateValues()
-        newEnder3Y = mateValuesNow[9]
+        newEnder3YXZ = [mateValuesNow[9],mateValuesNow[10],mateValuesNow[11]]
         # print(mateValuesNow)
         print(mateValuesNow[0:6])
         # print(LastJointArray)
-        if lastEnder3Y - newEnder3Y != 0:
-            yjog = int((lastEnder3Y - newEnder3Y)*1000)
-            opJog(0,yjog,0)
+        if lastEnder3YXZ != newEnder3YXZ:
+            yjog = int((lastEnder3YXZ[0] - newEnder3YXZ[0])*1000)
+            xjog = int((newEnder3YXZ[1] - lastEnder3YXZ[1])*1000)
+            zjog = int((newEnder3YXZ[2] - lastEnder3YXZ[2])*1000)
+            # print(xjog,yjog,zjog)
+            opJog(xjog,yjog,zjog)
 
         for i in range(6):
             if LastJointArray[i] - mateValuesNow[i] < 0:
@@ -69,6 +72,7 @@ try:
                     time.sleep(delay)
         LastJointArray = mateValuesNow[0:6]
         LastFullArray = mateValuesNow
+        lastEnder3YXZ = [mateValuesNow[9],mateValuesNow[10],mateValuesNow[11]]
         time.sleep(0.5)
 except KeyboardInterrupt:
     ser.close()
