@@ -1,5 +1,10 @@
 # Onshape-3D-Printer
 
+This repo has python scripts that allow you to communicate between an Onshape document and an Octoprint server for starting 3D prints and controlling the removal of the 3D print with an AL5D robot arm.
+
+![PrintRemoval](https://user-images.githubusercontent.com/54808875/135482423-0e2dea25-97e1-4e1e-8ade-f34e2ea6ab85.gif)
+
+
 ## Set up Pi
 Start by flashing the latest version of Octopi onto your raspberry pi. Download the [image from here](https://octoprint.org/download/), unzip the file so you get the .img file, then flash it to an SD card with the raspberry pi imager. Once done flashing, unplug and replug the SD card so it shows up as "Boot", then change the "octopi_wpa_supplicant.conf" file to connect to your wifi network.
 
@@ -24,6 +29,15 @@ Then running this command to install all packages
 
 ```
 pip3 install -r requirements.txt
+```
+
+You will also need to generate API Keys for Onshape and add them to a file called "apikeys.py". Go to [Onshape's Developer Portal](https://dev-portal.onshape.com/) and generate api keys, then create a new text file named "apikeys.py" with the content formatted as below, then make sure the file is in the same folder as the high level folder created once you cloned the repo.
+
+**Note: It is very important to never share these keys**
+
+```
+access = "<access key here>"
+secret = "<secret key here>"
 ```
 
 ## Set up Slic3r
