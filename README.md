@@ -31,9 +31,9 @@ Then running this command to install all packages
 pip3 install -r requirements.txt
 ```
 
-You will also need to generate API Keys for Onshape and add them to a file called "apikeys.py". **Note: It is very important to never share these keys**
+You will also need to generate API Keys for Onshape and add them to a file called "apikeys.py". Go to [Onshape's Developer Portal](https://dev-portal.onshape.com/) and generate api keys, then create a new text file named "apikeys.py" with the content formatted as below, then make sure the file is in the same folder as the high level folder created once you cloned the repo.
 
-Go to [Onshape's Developer Portal](https://dev-portal.onshape.com/) and generate api keys, then create a new text file named "apikeys.py" with the content formatted as below, then make sure the file is in the same folder as the high level folder created once you cloned the repo.
+**Note: It is very important to never share these keys**
 
 ```
 access = "<access key here>"
