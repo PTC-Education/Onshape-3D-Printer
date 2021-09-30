@@ -1,5 +1,9 @@
 # Onshape-3D-Printer
 
+This repo has python scripts that allow you to communicate between an Onshape document and an Octoprint server for starting 3D prints and controlling the removal of the 3D print with an AL5D robot arm.
+
+
+
 ## Set up Pi
 Start by flashing the latest version of Octopi onto your raspberry pi. Download the [image from here](https://octoprint.org/download/), unzip the file so you get the .img file, then flash it to an SD card with the raspberry pi imager. Once done flashing, unplug and replug the SD card so it shows up as "Boot", then change the "octopi_wpa_supplicant.conf" file to connect to your wifi network.
 
@@ -25,6 +29,7 @@ Then running this command to install all packages
 ```
 pip3 install -r requirements.txt
 ```
+
 
 ## Set up Slic3r
 
