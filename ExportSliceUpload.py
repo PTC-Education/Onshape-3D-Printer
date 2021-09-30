@@ -11,7 +11,10 @@ printerConfig = input('Input the name of your 3D printer config file: ')
 # printerConfig = "colabConfigBundle.ini"
 
 try:
-    exportSTL(url,filename,'CoinText%3D'+configurationText+'%3BList_Os3Ch7CJl5rv3f%3D'+logoChoice)
+    if logoChoice == "PTC":
+        exportSTL(url,filename,'CoinText%3D'+configurationText+'%3BList_Os3Ch7CJl5rv3f%3D'+logoChoice)
+    else:
+        exportSTL(url,filename,'CoinText%3D'+configurationText)
     command = "slic3r-prusa3d --no-gui --load "+printerConfig+" "+filename
     # Suppress the output in order to not break the EMSSS
     suppress = " >/dev/null 2>&1"
