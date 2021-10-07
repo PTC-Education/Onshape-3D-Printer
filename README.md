@@ -25,19 +25,29 @@ git clone https://github.com/PTC-Education/Onshape-3D-Printer
 cd Onshape-3D-Printer
 ```
 
+First run the following lines to install pip3 package installer
+```
+sudo apt-get update
+sudo apt-get -y install python3-pip
+```
+
 Then running this command to install all packages
 
 ```
 pip3 install -r requirements.txt
 ```
 
-You will also need to generate API Keys for Onshape and add them to a file called "apikeys.py". Go to [Onshape's Developer Portal](https://dev-portal.onshape.com/) and generate api keys, then create a new text file named "apikeys.py" with the content formatted as below, then make sure the file is in the same folder as the high level folder created once you cloned the repo.
+You will also need to generate API Keys for Onshape and OctoPi, then add them to a file called "apikeys.py". 
+-Go to [Onshape's Developer Portal](https://dev-portal.onshape.com/) and generate api keys
+-Create appkeys from Octoprint [(instructions here)](https://docs.octoprint.org/en/master/bundledplugins/appkeys.html) 
+-Create a new text file named "apikeys.py" (can run `sudo nano apikeys.py` to creater the file) with the content formatted as below, then make sure the file is in the same folder as the high level folder created once you cloned the repo.
 
 **Note: It is very important to never share these keys**
 
 ```
 access = "<access key here>"
 secret = "<secret key here>"
+OPappKey = "<OctoPi Appkey here>"
 ```
 
 ## Set up Slic3r
@@ -45,15 +55,15 @@ secret = "<secret key here>"
 From terminal run
 ```
 sudo apt-get update
-sudo apt-get install slic3r-prusa3d
+sudo apt-get install slic3r-prusa
 ```
 
-From your computer, copy a configuration file to the Pi with the following line (config file can be generated from the Prusa Slicer desktop app to make sure you have your settings correct for your printer)
+From your computer, **open a new terminal window** and copy a configuration file to the Pi with the following line (config file can be generated from the Prusa Slicer desktop app to make sure you have your settings correct for your printer)
 ```
-scp colabConfigBundle.ini pi@octopi.local:~/Documents
+scp Ender3config.ini pi@octopi.local:~/Onshape-3D-Printer
 ```
 
 Then run the following command to slice your file (change your config.ini file and OnshapePart.stl if different)
 ```
-/usr/bin/slic3r-prusa3d --load configtest4.ini OnshapePart.stl
+/usr/bin/slic3r-prusa3d --load Ender3config.ini OnshapePart.stl
 ```
