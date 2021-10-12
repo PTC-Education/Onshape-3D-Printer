@@ -10,12 +10,16 @@ Start by flashing the latest version of Octopi onto your raspberry pi. Download 
 
 Once done, plug the SD card into your pi and power it on. When it starts up, you should be able to go to "octopi.local" on your wifi network and see the interface.
 
-To access the RPi, run the following command (password should be default, "raspberry")
+To access the RPi, run the following command (password should be default, "raspberry"). If you've done this before, you may need to clear the SSH keys with `ssh-keygen -R octopi.local`
 ```
 ssh pi@octopi.local
 ```
 
-Now you are in and can start setting up the automation
+Now you are in! Run the following two lines to finish setting up the Pi
+```
+sudo apt-get update --allow-releaseinfo-change
+sudo apt-get upgrade
+```
 
 ## Set up Onshape Repo
 Start by cloning this repository, then going into the new folder
@@ -27,7 +31,6 @@ cd Onshape-3D-Printer
 
 First run the following lines to install pip3 package installer
 ```
-sudo apt-get update
 sudo apt-get -y install python3-pip
 ```
 
