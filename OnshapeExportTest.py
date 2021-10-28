@@ -5,8 +5,14 @@ elementConfiguration = getElementConfiguration(url)
 configString = ""
 fileConfig = ""
 for param in elementConfiguration['configurationParameters']:
-    config = input("Input the configuration for the parameter named "+param['message']['parameterName']+": ")
-    configString = configString + param['message']['parameterId'] + "%3D" + config
+    if param['typeName'] == "BTMConfigurationParameterEnum":
+        options = "Options are: "
+        for option in param['message']['options']:
+            options = options + option['message']['option'] + ", "
+        config = input("Input the configuration for the parameter named "+param['message']['parameterName']+" ("+options+"): ")
+    else:
+        config = input("Input the configuration for the parameter named "+param['message']['parameterName']+": ")
+    configString = configString + param['message']['parameterId'] + "%3D" + config + ";"
     fileConfig = fileConfig + param['message']['parameterId'] + "_" + config
 
 print(configString)
