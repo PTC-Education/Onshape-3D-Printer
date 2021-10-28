@@ -50,6 +50,8 @@ def connect():
     response = requests.request("POST", opBase+url, params=params, headers=headers, data=json.dumps(payload))
     return response
 
+connectResponse = connect()
+print(connectResponse)
 if connect().status_code ==204:
     print("Octoprint API Connected!")
 else:
