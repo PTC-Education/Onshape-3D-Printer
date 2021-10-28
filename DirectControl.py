@@ -3,6 +3,8 @@ from os import error
 from SerialSetup import *
 from AL5Dsetup import *
 
+url = input("Enter the URL of your Onshape Assembly: ")
+
 ports = serial_ports()
 print(ports)
 portname = input('Ports found listed above. Enter name of port for robot arm: ')
@@ -34,12 +36,12 @@ try:
         empty = [0 for i in range(6)]
         ndPosArray = np.vstack([ndPosArray,empty])
         
-        checkpointPos = getCheckpointPos()
+        checkpointPos = getCheckpointPos(url)
         checkpointOffset = [-0.006,-0.01,0.007]
         newMateValues = GetJointAngles(checkpointPos[0]+checkpointOffset[0],checkpointPos[1]+checkpointOffset[1],checkpointPos[2]+checkpointOffset[2],mateValuesNow[6])
         # print(mateValuesNow[7],mateValuesNow[8])
-        setMateValues(mateResponse,newMateValues[0],newMateValues[1],newMateValues[2],newMateValues[3],mateValuesNow[7],mateValuesNow[8])
-        mateValuesNow, mateResponse = getMateValues()
+        setMateValues(url,mateResponse,newMateValues[0],newMateValues[1],newMateValues[2],newMateValues[3],mateValuesNow[7],mateValuesNow[8])
+        mateValuesNow, mateResponse = getMateValues(url)
         newEnder3YXZ = [mateValuesNow[9],mateValuesNow[10],mateValuesNow[11]]
         # print(mateValuesNow)
         print(mateValuesNow[0:6])

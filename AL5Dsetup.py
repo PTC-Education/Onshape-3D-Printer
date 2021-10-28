@@ -1,15 +1,65 @@
 from OnshapePlus import *
 import math
 import numpy as np
+from os import access
+import time
+import math
+import serial
+import sys
+import glob
+import json
 
-url = 'https://cad.onshape.com/documents/f5405092df38df2bb9ff1a24/w/802789005337ddbf1908553c/e/96ccba7ab79a0fcb270c067a'
+##
+##
+## Define Serial Functions
+##
+##
+def serial_ports():
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.*')
+        for port in ports:
+            if 'usb' in port:
+                guess = port                
+                
+        try:
+            return guess
+        except:
+            print('no USB ports found')
+            quit()
+    elif sys.platform.startswith('linux'):
+        ports = glob.glob('/dev/tty*')
+        usbPorts = []
+        for port in ports:
+            if 'USB' in port:
+                usbPorts.append(port)                
+                
+        if len(usbPorts) == 0:
+            print('no USB ports found')
+            quit()
+        else:
+            # print(usbPorts)
+            return usbPorts
+    else:
+        raise EnvironmentError('Unsupported platform')
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    print('port found:'+result)
+    return result[1]
 
 ##
 ##
 ## Onshape Functions for robot arm assembly
 ##
 ##
-def getMateValues():
+def getMateValues(url):
     RobotData = []
     RobotData = [0 for i in range(12)]
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
@@ -62,7 +112,7 @@ def getMateValues():
 
     return RobotData, fullResponse
 
-def getCheckpointPos():
+def getCheckpointPos(url):
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid'
 
     element = OnshapeElement(url)
@@ -91,7 +141,7 @@ def getCheckpointPos():
 
     return checkpointPos
 
-def setMateValues(fullResponse,baseAngle,shoulderAngle,elbowAngle,wristAngle,handAngle,gripperAngle):
+def setMateValues(url,fullResponse,baseAngle,shoulderAngle,elbowAngle,wristAngle,handAngle,gripperAngle):
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
 
     element = OnshapeElement(url)
