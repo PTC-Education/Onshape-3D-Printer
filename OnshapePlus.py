@@ -55,6 +55,126 @@ except:
 ##
 ##
 
+def documentElementsList(url: str):
+  fixed_url = '/api/documents/d/did/w/wid/elements'
+  element = OnshapeElement(url)
+  fixed_url = fixed_url.replace('did', element.did)
+  fixed_url = fixed_url.replace('wid', element.wvmid)
+  method = 'GET'
+
+  params = {}
+  payload = {}
+  headers = {'Accept': 'application/vnd.onshape.v1+json',
+            'Content-Type': 'application/json'}
+
+  response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+  parsed = json.loads(response.data)
+  # The command below prints the entire JSON response from Onshape
+  # print(json.dumps(parsed, indent=4, sort_keys=True))
+  return parsed
+
+def addAppElement(url:str,name="Octoprint AppElement"):
+    fixed_url = '/api/appelements/d/did/w/wid'
+    element = OnshapeElement(url)
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+
+    method = 'POST'
+
+    params = {}
+    payload = {
+        "formatId": "com.python",
+        "name": name,
+        "description": "Created App Element",
+        "jsonTree": {
+            "printerInfo":{},
+            "jobInfo":{},
+            "image":"pending",
+            "printQueue":[],
+            "printerCommand":"none",
+            "updateInfo":""
+        }
+    }
+    headers = {'Accept': 'application/vnd.onshape.v1+json',
+            'Content-Type': 'application/json'}
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+    parsed = json.loads(response.data)
+    return parsed
+
+def getJsonTree(url:str):
+    fixed_url = '/api/appelements/d/did/w/wid/e/eid/content/json'
+    element = OnshapeElement(url)
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+    fixed_url = fixed_url.replace('eid', element.eid)
+
+    method = 'GET'
+
+    params = {}
+    payload = {}
+    headers = {'Accept': 'application/vnd.onshape.v2+json',
+            'Content-Type': 'application/json'}
+
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+    parsed = json.loads(response.data)
+
+    return parsed
+
+def addAppElementJsonKey(url:str,newKeyName="foo",newKeyValue="bar"):
+    fixed_url = '/api/appelements/d/did/w/wid/e/eid/content'
+    element = OnshapeElement(url)
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+    fixed_url = fixed_url.replace('eid', element.eid)
+
+    method = 'POST'
+
+    # Insertion: { 'btType' : 'BTJEditInsert-2523', 'path' : path, 'value' : newValue }
+
+    params = {}
+    payload = {
+        "parentChangeId": getJsonTree(url)['changeId'],
+        "jsonTreeEdit": {'btType' : 'BTJEditInsert-2523', 
+                        'path' : { 'btType' : 'BTJPath-3073', 'startNode' : '', 'path' : [{ 'btType' : 'BTJPathKey-3221', 'key' : newKeyName }] }, 
+                        'value' : newKeyValue }
+        }
+
+    headers = {'Accept': 'application/vnd.onshape.v1+json',
+            'Content-Type': 'application/json'}
+
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+    parsed = json.loads(response.data)
+    return parsed
+
+def updateAppElementJsonKey(url:str,keyName="foo",keyValue="bar"):
+    fixed_url = '/api/appelements/d/did/w/wid/e/eid/content'
+    element = OnshapeElement(url)
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+    fixed_url = fixed_url.replace('eid', element.eid)
+
+    method = 'POST'
+
+    params = {}
+    payload = {
+        "parentChangeId": getJsonTree(url)['changeId'],
+        "jsonTreeEdit": {'btType' : "BTJEditChange-2636", 
+                        'path' : { 'btType' : 'BTJPath-3073', 'startNode' : '', 'path' : [{ 'btType' : 'BTJPathKey-3221', 'key' : keyName }] }, 
+                        'value' : keyValue }
+        }
+
+    headers = {'Accept': 'application/vnd.onshape.v1+json',
+            'Content-Type': 'application/json'}
+
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+    parsed = json.loads(response.data)
+    return parsed
+
 ## Get Mates Function
 def getMates(url):
     fixed_url = '/api/assemblies/d/did/w/wid/e/eid/matevalues'
@@ -158,6 +278,47 @@ def exportSTL(url: str, filename="OnshapePart.stl", configuration=""):
     with open(filename, 'wb') as f:
         f.write(response.data.encode())
     print('file exported as '+filename)
+
+## Get configuration from element
+def getElementConfiguration(url: str):
+    fixed_url = '/api/elements/d/did/w/wid/e/eid/configuration'
+    element = OnshapeElement(url)
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+    fixed_url = fixed_url.replace('eid', element.eid)
+
+    method = 'GET'
+
+    params = {}
+    payload = {}
+    headers = {'Accept': 'application/vnd.onshape.v1+json; charset=UTF-8;qs=0.1',
+            'Content-Type': 'application/json'}
+
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+    parsed = json.loads(response.data)
+    # The command below prints the entire JSON response from Onshape
+    # print(json.dumps(parsed, indent=4, sort_keys=True))
+    return parsed
+
+def getPartsInPartStudio(url: str):
+    fixed_url = '/api/parts/d/did/w/wid/e/eid/'
+
+    element = OnshapeElement(url)
+    fixed_url = fixed_url.replace('did', element.did)
+    fixed_url = fixed_url.replace('wid', element.wvmid)
+    fixed_url = fixed_url.replace('eid', element.eid)
+
+    method = 'GET'
+
+    params = {}
+    payload = {}
+    headers = {'Accept': 'application/vnd.onshape.v1+json; charset=UTF-8;qs=0.1',
+                'Content-Type': 'application/json'}
+
+    response = client.api_client.request(method, url=base + fixed_url, query_params=params, headers=headers, body=payload)
+
+    parsed = json.loads(response.data)
+    return parsed
 
 def printerStatus(nozzleTemp,nozzleTarget,bedTemp,bedTarget,printerState,printStatus):
     fixed_url = '/api/partstudios/d/did/w/wid/e/eid/features'

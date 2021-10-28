@@ -4,8 +4,8 @@ from OnshapePlus import *
 while True:
     jobInfo = opJobInfo()
     printerInfo, temps = opInfo()
-    # print(jobInfo['state'])
-    # print(jobInfo['progress']['completion'])
+    print(jobInfo['state'])
+    print(jobInfo['progress']['completion'])
     print(temps)
     try:
         completion = int(jobInfo['progress']['completion'])

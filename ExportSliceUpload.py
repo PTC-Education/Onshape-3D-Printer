@@ -1,20 +1,39 @@
 from OnshapePlus import *
 from Octoprint import *
 
-
 url = input('Input url of Part Studio you want to export as STL: ')
-print('default configuration for token = "CoinText%3DMatt%3BList_Os3Ch7CJl5rv3f%3DPTC"')
-configurationText = input('Input the configuration text (just click enter if there are none): ')
-logoChoice = input('Do you want PTC or Onshape logo on the back?: ')
-filename = input('Input the filename for the stl (just click enter if you want to use "OnshapePart.stl"): ')
-printerConfig = input('Input the name of your 3D printer config file: ')
+elementConfiguration = getElementConfiguration(url)
+configString = ""
+fileConfig = ""
+for param in elementConfiguration['configurationParameters']:
+    config = input("Input the configuration for the parameter named "+param['message']['parameterName']+": ")
+    configString = configString + param['message']['parameterId'] + "%3D" + config
+    fileConfig = fileConfig + param['message']['parameterId'] + "_" + config
+
+print(configString)
+partList = getPartsInPartStudio(url)
+fileName = ""
+for parts in partList:
+    fileName = fileName + parts['name'] + "_"
+
+defaultFileName = fileName + fileConfig + ".stl"
+filename = input('Click enter to export parts to filename "'+defaultFileName+'" or type a file name here: ')
+if filename == "":
+    exportSTL(url,defaultFileName,configString)
+    gcodefile = defaultFileName.replace(".stl",".gcode")
+else:
+    exportSTL(url,filename,configString)
+    gcodefile = filename.replace(".stl",".gcode")
+
+print('File successfully exported!')
+print('Loaded 3D printer config files listed below...')
+for file in os.listdir("./"):
+    if file.endswith(".ini"):
+        print(os.path.join("./", file))
+printerConfig = input('Input the name of the config file you want to use for slicing: ')
 # printerConfig = "colabConfigBundle.ini"
 
 try:
-    if logoChoice == "PTC":
-        exportSTL(url,filename,'CoinText%3D'+configurationText+'%3BList_Os3Ch7CJl5rv3f%3D'+logoChoice)
-    else:
-        exportSTL(url,filename,'CoinText%3D'+configurationText)
     command = "slic3r-prusa3d --no-gui --load "+printerConfig+" "+filename
     # Suppress the output in order to not break the EMSSS
     suppress = " >/dev/null 2>&1"
@@ -22,7 +41,6 @@ try:
     # Run the gcode generation and 
     os.system(command + suppress)
     s=""
-    gcodefile = filename.replace(".stl",".gcode")
     with open(gcodefile) as f: s = f.read()
     
     uploadFileToOctoprint(gcodefile, s)

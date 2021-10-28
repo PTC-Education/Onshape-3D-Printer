@@ -4,13 +4,14 @@ import time
 import os
 import sys
 import binascii
-
+import urllib.request
+import base64
 ##
 ##
 ## Define base URL of octoprint server
 ##
 ##
-base = "http://octopi.local"
+opBase = "http://octopi.local"
 
 ##
 ##
@@ -46,13 +47,19 @@ def connect():
     }
     params = {}
 
-    response = requests.request("POST", base+url, params=params, headers=headers, data=json.dumps(payload))
-    print(response)
+    response = requests.request("POST", opBase+url, params=params, headers=headers, data=json.dumps(payload))
+    return response
+
+if connect().status_code ==204:
+    print("Octoprint API Connected!")
+else:
+    print("Octoprint not connected, please check api keys and printer connection")
+    exit()
 
 def opInfo():
     url = "/api/printer"
 
-    payload="{}"
+    payload={}
     headers = {
     'X-Api-Key': OPappKey,
     'Content-Type': 'application/json',
@@ -61,7 +68,7 @@ def opInfo():
     params = {}
     params = {'history':'false'}
 
-    response = requests.request("GET", base+url, params=params, headers=headers, data=payload)
+    response = requests.request("GET", opBase+url, params=params, headers=headers, data=payload)
     # print(response)
     FullResponse = json.dumps(response.json(), indent=4, sort_keys=True)
     # print(FullResponse)
@@ -70,12 +77,12 @@ def opInfo():
     BedTempTarget = response.json()['temperature']['bed']['target']
     ToolTempTarget = response.json()['temperature']['tool0']['target']
 
-    return response, [BedTemp,ToolTemp,BedTempTarget,ToolTempTarget]
+    return response.json()
 
 def opJobInfo():
     url = "/api/job"
 
-    payload="{}"
+    payload={}
     headers = {
     'X-Api-Key': OPappKey,
     'Content-Type': 'application/json',
@@ -84,7 +91,7 @@ def opJobInfo():
     params = {}
     params = {'history':'false'}
 
-    response = requests.request("GET", base+url, params=params, headers=headers, data=payload)
+    response = requests.request("GET", opBase+url, params=params, headers=headers, data=payload)
     # print(response)
     FullResponse = json.dumps(response.json(), indent=4, sort_keys=True)
     # print(FullResponse)
@@ -103,7 +110,7 @@ def opHome():
     'accept': 'application/json'
     }
 
-    response = requests.request("POST", base+url, headers=headers, data=json.dumps(payload))
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
     print(response)
 
 
@@ -123,7 +130,7 @@ def opJog(x,y,z):
     'accept': 'application/json'
     }
 
-    response = requests.request("POST", base+url, headers=headers, data=json.dumps(payload))
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
     try:
         FullResponse = json.dumps(response.json(), indent=4, sort_keys=True)
     except:
@@ -143,7 +150,7 @@ def opStartPrint(filename):
     'accept': 'application/json'
     }
 
-    response = requests.request("POST", base+url, headers=headers, data=json.dumps(payload))
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
     try:
         FullResponse = json.dumps(response.json(), indent=4, sort_keys=True)
         print(FullResponse)
@@ -151,7 +158,7 @@ def opStartPrint(filename):
         print(response)
 
 def opStop():
-    base = "http://octopi.local"
+    opBase = "http://octopi.local"
     url = "/api/job"
 
     payload = {
@@ -164,7 +171,7 @@ def opStop():
     'accept': 'application/json'
     }
 
-    response = requests.request("POST", base+url, headers=headers, data=json.dumps(payload))
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
     try:
         FullResponse = json.dumps(response.json(), indent=4, sort_keys=True)
     except:
@@ -225,5 +232,83 @@ def uploadFileToOctoprint(fileName:str, fileContent:str) -> bool:
 
     params = {}
 
-    response = requests.request("POST", base+url, params=params, headers=headers, data=payload)
+    response = requests.request("POST", opBase+url, params=params, headers=headers, data=payload)
     print(response)
+
+def getOctoprintImage():
+    urllib.request.urlretrieve("http://octopi.local/webcam/?action=snapshot", './image.jpg')
+    with open('./image.jpg', "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+
+    imgEncodedString = str(encoded_string)
+    imgString = 'data:image/jpg;base64,'+imgEncodedString.split("'",1)[1]
+    return imgString
+
+def opPreheatBedPLA():
+    url = "/api/printer/bed"
+
+    payload={
+        "command": "target",
+        "target": 50
+    }
+
+    headers = {
+        'X-Api-Key': OPappKey,
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+    }
+
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
+    return response
+    
+def opPreheatToolPLA():
+    url = "/api/printer/tool"
+
+    payload={
+        "command": "target",
+        "targets": {
+        "tool0": 200
+        }
+    }
+
+    headers = {
+        'X-Api-Key': OPappKey,
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+    }
+
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
+    return response
+
+def opUnheatToolBed():
+    url = "/api/printer/bed"
+
+    payload={
+        "command": "target",
+        "target": 0
+    }
+
+    headers = {
+        'X-Api-Key': OPappKey,
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+    }
+
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
+
+    url = "/api/printer/tool"
+
+    payload={
+        "command": "target",
+        "targets": {
+        "tool0": 0
+        }
+    }
+
+    headers = {
+        'X-Api-Key': OPappKey,
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+    }
+
+    response = requests.request("POST", opBase+url, headers=headers, data=json.dumps(payload))
