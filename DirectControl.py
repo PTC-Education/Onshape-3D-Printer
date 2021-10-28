@@ -27,7 +27,7 @@ for i in range(len(LastJointArray)):
                     ser.write(command.encode())
                     time.sleep(delay)
 
-mateValuesNow, mateResponse = getMateValues()
+mateValuesNow, mateResponse = getMateValues(url)
 lastEnder3YXZ = [mateValuesNow[9],mateValuesNow[10],mateValuesNow[11]]
 
 try:
