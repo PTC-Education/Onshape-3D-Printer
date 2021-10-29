@@ -1,6 +1,5 @@
 from Octoprint import opJog
 from os import error
-from SerialSetup import *
 from AL5Dsetup import *
 
 url = input("Enter the URL of your Onshape Assembly: ")
