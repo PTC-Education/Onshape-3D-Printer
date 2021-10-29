@@ -25,7 +25,7 @@ for parts in partList:
 defaultFileName = fileName + fileConfig + ".stl"
 filename = input("Click enter to export parts to filename '"+defaultFileName+"' or type a file name here: ")
 if filename == "":
-    exportSTL(url,defaultFileName,configString)
+    exportSTL(url,defaultFileName.strip("'"),configString)
     filename = defaultFileName
     gcodefile = defaultFileName.replace(".stl",".gcode")
 else:
