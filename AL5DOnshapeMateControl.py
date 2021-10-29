@@ -20,7 +20,7 @@ while True:
     newMateValues = GetJointAngles(checkpointPos[0]+checkpointOffset[0],checkpointPos[1]+checkpointOffset[1],checkpointPos[2]+checkpointOffset[2],mateValuesNow[6])
     print(mateValuesNow[7],mateValuesNow[8])
     setMateValues(url,mateResponse,newMateValues[0],newMateValues[1],newMateValues[2],newMateValues[3],mateValuesNow[7],mateValuesNow[8])
-    mateValuesNow, mateResponse = getMateValues()
+    mateValuesNow, mateResponse = getMateValues(url)
 
     for i in range(6):
         if LastJointArray[i] - mateValuesNow[i] < 0:
