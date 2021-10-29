@@ -16,14 +16,14 @@ for param in elementConfiguration['configurationParameters']:
     configString = configString + param['message']['parameterId'] + "%3D" + config + ";"
     fileConfig = fileConfig + param['message']['parameterId'] + "_" + config
 
-print(configString)
+# print(configString)
 partList = getPartsInPartStudio(url)
 fileName = ""
 for parts in partList:
     fileName = fileName + parts['name'] + "_"
 
 defaultFileName = fileName + fileConfig + ".stl"
-filename = input('Click enter to export parts to filename "'+defaultFileName+'" or type a file name here: ')
+filename = input("Click enter to export parts to filename '"+defaultFileName+"' or type a file name here: ")
 if filename == "":
     exportSTL(url,defaultFileName,configString)
     filename = defaultFileName
