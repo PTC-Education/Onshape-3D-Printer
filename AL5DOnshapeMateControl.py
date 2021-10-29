@@ -22,19 +22,5 @@ while True:
     setMateValues(url,mateResponse,newMateValues[0],newMateValues[1],newMateValues[2],newMateValues[3],mateValuesNow[7],mateValuesNow[8])
     mateValuesNow, mateResponse = getMateValues(url)
 
-    for i in range(6):
-        if LastJointArray[i] - mateValuesNow[i] < 0:
-            posArray = np.array(range(LastJointArray[i],mateValuesNow[i],steps))
-        else:
-            posArray = np.array(range(LastJointArray[i],mateValuesNow[i],-steps))
-    for j in range(len(posArray)):
-        try:
-            ndPosArray[j][i] = posArray[j]
-        except:
-            ndPosArray = np.vstack([ndPosArray,empty])
-            ndPosArray[j][i] = posArray[j]
-
-    for x in ndPosArray:
-        print(x)
     LastJointArray = mateValuesNow[0:5]
     time.sleep(0.5)
