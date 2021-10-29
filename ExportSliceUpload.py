@@ -22,15 +22,21 @@ fileName = ""
 for parts in partList:
     fileName = fileName + parts['name'] + "_"
 
-defaultFileName = fileName + fileConfig + ".stl"
-filename = input("Click enter to export parts to filename '"+defaultFileName+"' or type a file name here: ")
-if filename == "":
-    exportSTL(url,defaultFileName.strip("'"),configString)
-    filename = defaultFileName
-    gcodefile = defaultFileName.replace(".stl",".gcode")
-else:
-    exportSTL(url,filename,configString)
-    gcodefile = filename.replace(".stl",".gcode")
+## to fix: default filename
+## 
+# defaultFileName = fileName + fileConfig + '.stl'd
+# filename = input("Click enter to export parts to filename '"+defaultFileName+"' or type a file name here: ")
+# if filename == "":
+#     exportSTL(url,defaultFileName,configString)
+#     filename = defaultFileName
+#     gcodefile = defaultFileName.replace(".stl",".gcode")
+# else:
+#     exportSTL(url,filename,configString)
+#     gcodefile = filename.replace(".stl",".gcode")
+
+filename = input("Enter a file name ending in .stl here: ")
+exportSTL(url,filename,configString)
+gcodefile = filename.replace(".stl",".gcode")
 
 print('File successfully exported!')
 print('Loaded 3D printer config files listed below...')
