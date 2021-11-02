@@ -47,9 +47,9 @@ while True:
         opPreheatToolPLA()
     elif jsonTree['tree']['printerCommand'] == "unheat":
         opUnheatToolBed()
-    elif jsonTree['tree']['printerCommand'] == "startNextInQueue":
-        opUnheatToolBed()
+    # elif jsonTree['tree']['printerCommand'] == "startNextInQueue":
+    #     opUnheatToolBed()
 
         
-    time.sleep(15)
+    time.sleep(10)
 
