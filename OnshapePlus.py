@@ -1,4 +1,5 @@
 from os import access
+from Octoprint import *
 import time
 import math
 import serial
@@ -51,10 +52,34 @@ except:
 
 ##
 ##
-## Onshape Functions
+## Utility Functions
+##
+##
+def exportSliceUpload(url: str, config: str, filename: str, printerConfig: str):
+    exportSTL(url,filename,config)
+    gcodefile = filename.replace(".stl",".gcode")
+    try:
+        command = "slic3r-prusa3d --no-gui --load "+printerConfig+" "+filename
+        # Suppress the output in order to not break the EMSSS
+        suppress = " >/dev/null 2>&1"
+
+        # Run the gcode generation and 
+        os.system(command + suppress)
+        s=""
+        with open(gcodefile) as f: s = f.read()
+        
+        uploadFileToOctoprint(gcodefile, s)
+        opStartPrint(gcodefile)
+    except:
+        print('fail')
+
+##
+##
+## Basic Onshape Functions
 ##
 ##
 
+## Get list of elements in document
 def documentElementsList(url: str):
   fixed_url = '/api/documents/d/did/w/wid/elements'
   element = OnshapeElement(url)
@@ -74,6 +99,7 @@ def documentElementsList(url: str):
   # print(json.dumps(parsed, indent=4, sort_keys=True))
   return parsed
 
+## Add initial appelement for printer monitor and control
 def addAppElement(url:str,name="Octoprint AppElement"):
     fixed_url = '/api/appelements/d/did/w/wid'
     element = OnshapeElement(url)
@@ -103,6 +129,7 @@ def addAppElement(url:str,name="Octoprint AppElement"):
     parsed = json.loads(response.data)
     return parsed
 
+## Get app element JSON tree
 def getJsonTree(url:str):
     fixed_url = '/api/appelements/d/did/w/wid/e/eid/content/json'
     element = OnshapeElement(url)
@@ -123,6 +150,7 @@ def getJsonTree(url:str):
 
     return parsed
 
+## Add a key to the JSON Tree of the app element
 def addAppElementJsonKey(url:str,newKeyName="foo",newKeyValue="bar"):
     fixed_url = '/api/appelements/d/did/w/wid/e/eid/content'
     element = OnshapeElement(url)
@@ -150,6 +178,7 @@ def addAppElementJsonKey(url:str,newKeyName="foo",newKeyValue="bar"):
     parsed = json.loads(response.data)
     return parsed
 
+## Update the value of a key from the JSON tree
 def updateAppElementJsonKey(url:str,keyName="foo",keyValue="bar"):
     fixed_url = '/api/appelements/d/did/w/wid/e/eid/content'
     element = OnshapeElement(url)

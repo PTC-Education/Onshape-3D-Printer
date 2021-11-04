@@ -35,6 +35,7 @@ updateAppElementJsonKey(appElementUrl,"jobInfo",jobInfo)
 while True:
     jsonTree = getJsonTree(appElementUrl)
     print(jsonTree['tree']['updateInfo'])
+    print(jsonTree['tree']['printQueue'])
     if jsonTree['tree']['updateInfo'] == "update":
         updateAppElementJsonKey(appElementUrl,"image",getOctoprintImage())
         updateAppElementJsonKey(appElementUrl,"printerInfo",opInfo())
