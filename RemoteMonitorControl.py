@@ -19,7 +19,7 @@ if appElementId == "":
     appElementId = appElement['elementId']
 
 appElementUrl = url.replace(elements.eid,appElementId)
-time.sleep(3)
+time.sleep(1)
 jsonTree = getJsonTree(appElementUrl)
 
 jobInfo = opJobInfo()
@@ -27,7 +27,7 @@ printerInfo = opInfo()
 # print(printerInfo['state']['text'])
 image = getOctoprintImage()
 
-time.sleep(3)
+time.sleep(1)
 updateAppElementJsonKey(appElementUrl,"image",image)
 updateAppElementJsonKey(appElementUrl,"printerInfo",printerInfo)
 updateAppElementJsonKey(appElementUrl,"jobInfo",jobInfo)
@@ -49,8 +49,9 @@ while True:
         opPreheatToolPLA()
     elif jsonTree['tree']['printerCommand'] == "unheat":
         opUnheatToolBed()
-    # elif jsonTree['tree']['printerCommand'] == "startNextInQueue":
-    #     opUnheatToolBed()
+    elif jsonTree['tree']['printerCommand'] == "startNextInQueue":
+        partStudioUrl = url.replace(elements.eid,jsonTree['tree']['printQueue'][0]['eid'])
+        exportSliceUpload(partStudioUrl,jsonTree['tree']['printQueue'][0]['config'],"Ender3config.ini")
 
         
     time.sleep(10)
