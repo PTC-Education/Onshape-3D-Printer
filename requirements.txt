@@ -2,6 +2,6 @@ onshape-client
 pyserial
 requests
 numpy
-urllib
-base64
-binascii
+# base64
+# binascii
+# urllib.request
