@@ -44,6 +44,8 @@ for file in os.listdir("./"):
     if file.endswith(".ini"):
         print(os.path.join("./", file))
 printerConfig = input('Input the name of the config file you want to use for slicing: ')
+if not "./" in printerConfig:
+    printerConfig = "./" + printerConfig
 # printerConfig = "colabConfigBundle.ini"
 
 try:
@@ -51,12 +53,13 @@ try:
     # Suppress the output in order to not break the EMSSS
     suppress = " >/dev/null 2>&1"
 
-    # Run the gcode generation and 
+    # Run the gcode generation and save output as a string
     os.system(command + suppress)
     s=""
     with open(gcodefile) as f: s = f.read()
     
+    #upload Gcode string to Octopirnt and start print
     uploadFileToOctoprint(gcodefile, s)
     opStartPrint(gcodefile)
 except:
-    print('fail')
+    print('Failed at slicing. Please ensure prusa-slic3r is installed and your configuration file works.')
