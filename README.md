@@ -71,3 +71,13 @@ Then run the following command to slice your file (change your config.ini file a
 ```
 /usr/bin/slic3r-prusa3d --load Ender3config.ini OnshapePart.stl
 ```
+
+## Using the Code
+
+The repo contains a number of python scripts that you can execute (or modify to develop your own custom integration) to integrate Onshape data with your 3D printing system. 
+
+#### Automated export, slicing, and printing of parts
+```
+python3 ExportSliceUpload.py
+```
+This script first asks for a URL of an Onshape Part Studio, then checks if there are configurations and asks you to specify the configurations if there are any. It will then ask for a filename for the exported parts (ending in .stl), export all parts in the part studio, slice them using your pre-loaded configuration file (ending in .ini), then send the gcode file to Octopi and start the print.
