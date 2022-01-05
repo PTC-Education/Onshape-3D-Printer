@@ -43,7 +43,7 @@ pip3 install -r requirements.txt
 You will also need to generate API Keys for Onshape and OctoPi, then add them to a file called "apikeys.py". 
 
 - Go to [Onshape's Developer Portal](https://dev-portal.onshape.com/) and generate api keys
-- Create appkeys from the Octoprint interface [(instructions here)](https://docs.octoprint.org/en/master/bundledplugins/appkeys.html) 
+- Create a new appkey from the Octoprint interface [(instructions here)](https://docs.octoprint.org/en/master/bundledplugins/appkeys.html). You can put any sting in as your "application identifier" such as "Onshape".
 - Create a new text file named "apikeys.py" (can run `sudo nano apikeys.py` to creater the file) with the content formatted as below, then make sure the file is in the same folder as the high level folder created once you cloned the repo.
 
 **Note: It is very important to never share these keys**
