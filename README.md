@@ -1,9 +1,13 @@
 # Onshape-3D-Printer
 
-This repo has python scripts that allow you to communicate between an Onshape document and an Octoprint server for starting 3D prints and controlling the removal of the 3D print with an AL5D robot arm.
+This repo has example python scripts that allow you to communicate between an Onshape document and an Octoprint server for starting 3D prints and automating workflows. [Public Onshape document linked here](https://cad.onshape.com/documents/949db49d403f8dda0a38939e/w/bb9082de5d7f8a3994b5f694/e/09def4e24ce0168b59242e48). [Video demo linked here](https://www.youtube.com/watch?v=rT2Aqigupbc).
 
-![PrintRemoval](https://user-images.githubusercontent.com/54808875/135482423-0e2dea25-97e1-4e1e-8ade-f34e2ea6ab85.gif)
+![Onshape 3D Printer GIF](https://user-images.githubusercontent.com/54808875/148309029-bdd2feb8-5128-4d2c-9c3d-9c59cc344c10.gif)
 
+These scripts allow you to:
+* Automatically export a part, generate gcode with a preconfigured slicer configuration, and start the print.
+* Directly control the 3D printer axes positions with an Onshape assembly
+* Control an AL5D robot arm to automatically remove prints
 
 ## Set up Pi
 Start by flashing the latest version of Octopi onto your raspberry pi. Download the [image from here](https://octoprint.org/download/), unzip the file so you get the .img file, then flash it to an SD card with the raspberry pi imager. Once done flashing, unplug and replug the SD card so it shows up as "Boot", then change the "octopi_wpa_supplicant.conf" file to connect to your wifi network.
